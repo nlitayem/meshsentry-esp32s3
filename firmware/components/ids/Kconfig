@@ -1,0 +1,62 @@
+menu "MeshSentry IDS"
+
+    config MS_WINDOW_S
+        int "Detection window (s)"
+        default 10
+
+    config MS_FWD_ALPHA_PPM
+        int "Selective-forwarding test significance (ppm)"
+        default 1000
+        help
+            One-sided binomial test: alert when P[X <= overheard] under an
+            honest forwarder is below alpha. 1000 ppm = 0.001.
+
+    config MS_FWD_Q_PCT
+        int "Assumed upstream delivery probability (%)"
+        default 90
+
+    config MS_MIN_HANDED
+        int "Minimum expected forwards before judging"
+        default 6
+
+    config MS_RATE_K_X10
+        int "Flooding: deviations above baseline (x10)"
+        default 40
+
+    config MS_RATE_MIN_FPS
+        int "Flooding: absolute rate floor (frames/s)"
+        default 5
+
+    config MS_RATE_WARM
+        int "Flooding: windows before the baseline is trusted"
+        default 3
+
+    config MS_ROUTE_MIN_CLAIMS
+        int "Route: forged hop-1 claims per window"
+        default 2
+
+    config MS_REPLAY_MIN
+        int "Replay: stale frames per window"
+        default 2
+
+    config MS_VOTE_TAU_PCT
+        int "Fusion: trust-weighted alert fraction (%)"
+        default 50
+
+    config MS_MASS_MIN_X10
+        int "Fusion: minimum accusing trust mass (x10)"
+        default 9
+
+    config MS_MIN_ACCUSERS
+        int "Fusion: minimum distinct accusing monitors"
+        default 3
+
+    config MS_SYBIL_DELTA_X10
+        int "Sybil: RSSI-signature distance threshold (dB x10)"
+        default 15
+
+    config MS_SYBIL_MIN_MONITORS
+        int "Sybil: minimum common monitors"
+        default 6
+
+endmenu

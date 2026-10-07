@@ -1,0 +1,65 @@
+menu "MeshSentry node"
+
+    choice MS_ROLE
+        prompt "Node role"
+        default MS_ROLE_NODE
+
+        config MS_ROLE_SINK
+            bool "Sink (gateway, runs fusion)"
+        config MS_ROLE_NODE
+            bool "Sensor node"
+        config MS_ROLE_ATTACKER
+            bool "Attacker (testbed emulation only)"
+    endchoice
+
+    config MS_NODE_ID
+        int "Node ID (0 = derive from MAC)"
+        range 0 32767
+        default 0
+        depends on !MS_ROLE_SINK
+
+    choice MS_ATTACK
+        prompt "Attack"
+        depends on MS_ROLE_ATTACKER
+        default MS_ATTACK_SELFWD
+
+        config MS_ATTACK_SELFWD
+            bool "Selective forwarding (grayhole/blackhole)"
+        config MS_ATTACK_SINKHOLE
+            bool "Sinkhole (forged hop-1 claim + blackhole)"
+        config MS_ATTACK_FLOOD
+            bool "Flooding (authenticated junk at high rate)"
+        config MS_ATTACK_REPLAY
+            bool "Replay (outsider, verbatim retransmission)"
+        config MS_ATTACK_SYBIL
+            bool "Sybil (fabricated identities)"
+    endchoice
+
+    config MS_ATTACK_START_S
+        int "Attack onset after boot (s)"
+        depends on MS_ROLE_ATTACKER
+        default 150
+
+    config MS_ATTACK_DROP_PCT
+        int "Selective forwarding drop probability (%)"
+        depends on MS_ATTACK_SELFWD
+        range 1 100
+        default 60
+
+    config MS_ATTACK_FLOOD_FPS
+        int "Flooding rate (frames/s)"
+        depends on MS_ATTACK_FLOOD
+        default 300
+
+    config MS_ATTACK_REPLAY_FPS
+        int "Replay rate (frames/s)"
+        depends on MS_ATTACK_REPLAY
+        default 4
+
+    config MS_ATTACK_N_SYBIL
+        int "Number of Sybil identities"
+        depends on MS_ATTACK_SYBIL
+        range 1 8
+        default 4
+
+endmenu

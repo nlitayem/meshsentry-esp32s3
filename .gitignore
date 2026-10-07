@@ -1,0 +1,23 @@
+# firmware build outputs and generated testbed keys (secret)
+firmware/build/
+firmware/build_*/
+firmware/build_*.log
+firmware/sdkconfig
+firmware/sdkconfig.old
+firmware/keys/
+firmware/managed_components/
+firmware/dependencies.lock
+
+# simulation outputs (regenerate with sim/run_experiments.py)
+sim/results/*.pkl
+sim/results/run.log
+__pycache__/
+*.pyc
+.venv/
+
+# LaTeX intermediates
+paper/*.aux
+paper/*.log
+paper/*.bbl
+paper/*.blg
+paper/*.out

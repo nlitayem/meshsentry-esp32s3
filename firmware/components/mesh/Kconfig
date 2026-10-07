@@ -1,0 +1,36 @@
+menu "MeshSentry mesh"
+
+    config MS_CHANNEL
+        int "Wi-Fi channel"
+        range 1 13
+        default 6
+
+    config MS_TX_POWER_DBM
+        int "TX power (dBm)"
+        range 2 20
+        default 2
+        help
+            Low TX power shrinks the radio range so that a desk- or
+            room-scale testbed forms a multi-hop topology.
+
+    config MS_BEACON_MS
+        int "Beacon period (ms)"
+        default 2000
+
+    config MS_DATA_MS
+        int "Sensor data period (ms)"
+        default 5000
+
+    config MS_CTL_OFFSET_MS
+        int "Sink control flood offset within a window (ms)"
+        default 8000
+
+    config MS_DECIDE_DELAY_MS
+        int "Sink fusion delay after window end (ms)"
+        default 6000
+
+    config MS_MITIGATION
+        bool "Enforce blacklist and local reaction in routing"
+        default y
+
+endmenu

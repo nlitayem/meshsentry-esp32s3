@@ -1,0 +1,31 @@
+% Firmware architecture on the ESP32-S3 (single column).
+\begin{tikzpicture}[
+  font=\scriptsize,
+  b/.style={rectangle, rounded corners=1.5pt, draw=black!55, fill=black!3, align=center, minimum height=6.5mm, inner sep=2pt},
+  ids/.style={b, draw=msblue!80!black, fill=msblue!10, text width=21mm},
+  hw/.style={b, draw=black!70, fill=black!12},
+  att/.style={b, draw=msorange!80!black, fill=msorange!12, dashed},
+  ar/.style={-{Stealth[length=1.5mm]}, semithick},
+  dar/.style={{Stealth[length=1.5mm]}-{Stealth[length=1.5mm]}, semithick},
+]
+\node[hw, text width=78mm] (hw) at (0,0) {ESP32-S3: Wi-Fi MAC/PHY (ESP-NOW) $\cdot$ SHA and MPI accelerators $\cdot$ 2$\times$LX7};
+\node[b, text width=35mm] (wifi) at (-2.15,1.05) {Wi-Fi task: \texttt{recv\_cb} (copy only)};
+\node[b, text width=35mm] (psa) at (2.15,1.05) {PSA Crypto (mbedTLS 4)\\HMAC-SHA256, ECDSA-P256};
+\node[b, text width=35mm] (q) at (-2.15,2.05) {RX queue (24 frames)};
+\node[b, text width=78mm, fill=black!6] (task) at (0,3.15)
+   {\textbf{\texttt{mesh\_task}} (core 1): authenticate $\to$ anti-replay $\to$ route/forward $\to$ timers};
+\node[ids] (mon) at (-2.75,4.4) {\texttt{ids\_monitor}\\neighbour table};
+\node[ids] (det) at (0,4.4) {\texttt{ids\_detect}\\local verdicts};
+\node[ids] (fus) at (2.75,4.4) {\texttt{ids\_fusion}\\(sink image only)};
+\node[att, text width=35mm] (att) at (-2.15,5.55) {\texttt{attack} (testbed only):\\drop / route / record hooks};
+\node[b, text width=35mm] (cfg) at (2.15,5.55) {\texttt{main} + Kconfig\\role, $\alpha$, $m$, $\delta$, \dots};
+\draw[ar] (hw.north -| wifi) -- (wifi);
+\draw[ar] (wifi) -- (q);
+\draw[ar] (q) -- (q |- task.south);
+\draw[dar] (psa) -- (psa |- task.south);
+\draw[dar] (psa.south) -- (hw.north -| psa);
+\draw[dar] (mon.south) -- (mon.south |- task.north);
+\draw[dar] (det.south) -- (det.south |- task.north);
+\draw[dar] (fus.south) -- (fus.south |- task.north);
+\draw[ar, dashed, msorange!80!black] (att.west) -- ++(-0.25,0) |- ([yshift=1mm]task.west);
+\end{tikzpicture}

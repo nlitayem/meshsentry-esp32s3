@@ -1,0 +1,38 @@
+% Frame and report-record formats (single column).
+\begin{tikzpicture}[font=\scriptsize, x=0.565mm, y=1mm]
+  \newcommand{\fld}[5]{% x, width, label, bytes, fill
+    \draw[fill=#5] (#1,0) rectangle ++(#2,6);
+    \node at (#1+#2/2,3) {#3};
+    \node[font=\tiny, black!60] at (#1+#2/2,-1.8) {#4};}
+  \node[anchor=west, font=\scriptsize\bfseries] at (0,9) {Mesh frame (ESP-NOW payload, $\leq$250\,B)};
+  \fld{0}{6}{M}{1}{black!6}
+  \fld{6}{6}{T}{1}{black!6}
+  \fld{12}{10}{tx}{2}{msblue!15}
+  \fld{22}{16}{txseq}{4}{msblue!15}
+  \fld{38}{10}{orig}{2}{black!6}
+  \fld{48}{10}{seq}{2}{black!6}
+  \fld{58}{10}{next}{2}{black!6}
+  \fld{68}{6}{h}{1}{black!6}
+  \fld{74}{6}{L}{1}{black!6}
+  \fld{80}{26}{payload}{$L$}{white}
+  \fld{106}{20}{tag}{8}{msorange!25}
+  \draw[decorate, decoration={brace, amplitude=3pt, mirror}] (0,-3.6) -- (80,-3.6)
+     node[midway, below=2pt, font=\tiny] {16-B header};
+  \draw[decorate, decoration={brace, amplitude=3pt, mirror}] (106,-3.6) -- (126,-3.6)
+     node[midway, below=2pt, font=\tiny, align=center] {HMAC-SHA256\\(trunc.\ 64 bit)};
+
+  \begin{scope}[yshift=-24mm]
+  \node[anchor=west, font=\scriptsize\bfseries] at (0,9) {Per-neighbour report record (10\,B)};
+  \fld{0}{20}{nbr}{2}{black!6}
+  \fld{20}{16}{$h$}{1}{msblue!15}
+  \fld{36}{16}{$o$}{1}{msblue!15}
+  \fld{52}{16}{$\hat p$}{1}{msblue!15}
+  \fld{68}{16}{RSSI}{1}{msorange!20}
+  \fld{84}{12}{$n$}{1}{msorange!20}
+  \fld{96}{12}{rate}{1}{black!6}
+  \fld{108}{18}{flags}{1+1}{black!6}
+  \node[anchor=west, font=\tiny, black!65, align=left] at (0,-6.2)
+   {$h$/$o$: expected/overheard forwards; $\hat p$: link PRR; flags: flood verdict,\\
+    baseline warm, ASNL held, beacon seen, replays (2 bit), bad hop-1 claims (2 bit)};
+  \end{scope}
+\end{tikzpicture}
